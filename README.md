@@ -1,31 +1,21 @@
+<<<<<<< HEAD
 # 🧩 Smart Backup Tool (Bash Project)
 
 ## 📘 Project Overview
 
-This project is a **smart backup automation script** written entirely in **Bash**.
 It allows you to:
 
-* Automatically create compressed `.tar.gz` backups of any folder
-* Verify integrity using **SHA256 checksum**
-* Manage and delete old backups intelligently
-* Configure everything through a simple config file
-* Test behavior safely with **dry run mode**
+# Bash Practice – System Backup Script
 
-Think of it as a smarter “copy and paste” that also cleans up after itself!
+A fully automated Bash-based backup system developed for learning and DevOps practice.
 
----
+Features:
+- Supports dry-run and real backup modes
+- Uses SHA256 checksum validation
+- Maintains daily, weekly, and monthly backups
+- Configurable via `backup.config`
 
-## ⚙️ Features
-
-✅ Create timestamped compressed backups
-✅ Verify backup integrity (checksum validation)
-✅ Automatically delete old backups based on retention rules
-✅ Configurable backup destination and exclusions
-✅ Lock mechanism to prevent multiple simultaneous runs
-✅ Dry-run mode (safe simulation)
-✅ Simple configuration via `backup.config`
-
----
+Repository: [DevOps-Practice-Test-1](https://github.com/Sayyarahul/DevOps-Practice-Test-1)
 
 ## 📁 Project Structure
 
@@ -232,3 +222,6 @@ GitHub: [https://github.com/Sayyarahul](https://github.com/Sayyarahul)
 
 > Start small, test often, and commit to GitHub frequently.
 > Simple, working automation is better than complex, broken code.
+=======
+Project Test
+>>>>>>> f64cc2017eb0bc7a3f6f5564c12a08095b529af3
