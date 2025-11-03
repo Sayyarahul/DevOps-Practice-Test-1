@@ -1,227 +1,132 @@
-<<<<<<< HEAD
-# 🧩 Smart Backup Tool (Bash Project)
+# 🧰 Bash Backup Automation Script (v2.0)
 
-## 📘 Project Overview
+A simple yet powerful **backup automation system** written in Bash.
+It supports **dry-run mode**, **log generation**, **checksum verification**, and **automatic cleanup** of old backups.
 
-It allows you to:
+---
 
-# Bash Practice – System Backup Script
+## 🚀 Features
 
-A fully automated Bash-based backup system developed for learning and DevOps practice.
+✅ Dry-run mode (safe preview before running real backups)
+✅ Auto-generated logs (`logs/backup_YYYY-MM-DD.log`)
+✅ SHA256 checksum verification for data integrity
+✅ Configurable retention policy (daily, weekly, monthly)
+✅ Exclusion patterns (`.git`, `node_modules`, etc.)
+✅ Works on Linux, macOS, and Git Bash for Windows
 
-Features:
-- Supports dry-run and real backup modes
-- Uses SHA256 checksum validation
-- Maintains daily, weekly, and monthly backups
-- Configurable via `backup.config`
+---
 
-Repository: [DevOps-Practice-Test-1](https://github.com/Sayyarahul/DevOps-Practice-Test-1)
-
-## 📁 Project Structure
+## 📦 Project Structure
 
 ```
-backup-system/
-├── backup.sh              ← Main Bash script
-├── backup.config          ← Configuration file
-├── backups/               ← Where backups are stored
-└── README.md              ← Documentation (this file)
+Bash-practice/
+├── backup.sh             # Main backup script
+├── backup.config         # Configuration file
+├── backups/              # Backup storage folder
+├── logs/                 # Log files created here automatically
+├── test_data/            # Example source data folder
+└── README.md             # Documentation
 ```
 
 ---
 
-## 🚀 How to Use
+## ⚙️ Configuration (`backup.config`)
 
-### 1️⃣ Installation
-
-Clone or copy this project into your local machine:
+Example:
 
 ```bash
-git clone https://github.com/YourUsername/backup-system.git
-cd backup-system
-chmod +x backup.sh
-```
+# -------------------------------------
+# Backup Script Configuration
+# -------------------------------------
 
-### 2️⃣ Configure Settings
-
-Edit `backup.config` to suit your environment:
-
-```bash
+# Destination folder where backups will be stored
 BACKUP_DESTINATION=/c/Users/Rahul\ Sayya/Bash-practice/backups
+
+# Patterns to exclude (comma-separated)
 EXCLUDE_PATTERNS=".git,node_modules,.cache"
+
+# Retention policy
 DAILY_KEEP=7
 WEEKLY_KEEP=4
 MONTHLY_KEEP=3
+
+# Command used for checksums
 CHECKSUM_CMD=sha256sum
 ```
 
-### 3️⃣ Dry Run (Test Mode)
+---
 
-Simulate what the script will do, without actually creating files:
+## 🧠 Usage
+
+### 1️⃣ Run in **Dry Run Mode** (Test only)
 
 ```bash
-./backup.sh --dry-run /path/to/source_folder
+./backup.sh --dry-run /c/Users/Rahul\ Sayya/Bash-practice/test_data
 ```
 
 Output example:
 
 ```
 [INFO] Dry run mode enabled
-[INFO] Would backup folder: /home/user/my_docs
-[INFO] Would save backup to: /home/user/backups
+[INFO] Would backup folder: /c/Users/Rahul Sayya/Bash-practice/test_data
+[INFO] Would save backup to: /c/Users/Rahul Sayya/Bash-practice/backups
 [INFO] Would skip patterns: .git,node_modules,.cache
+[INFO] Would keep daily=7 weekly=4 monthly=3
 ```
 
-### 4️⃣ Create a Real Backup
+A dry run **does not create** any backup files — it only previews what will happen.
+
+---
+
+### 2️⃣ Run Real Backup
 
 ```bash
-./backup.sh /path/to/source_folder
+./backup.sh /c/Users/Rahul\ Sayya/Bash-practice/test_data
 ```
 
-Output example:
+Expected output:
 
 ```
-[INFO] Creating backup for: /home/user/my_docs
-[SUCCESS] Backup created: backup-2025-11-03-1430.tar.gz
-[SUCCESS] Checksum verified successfully
-[DONE] Backup process completed successfully
+[INFO] Creating backup archive...
+[INFO] Backup created: /c/Users/Rahul Sayya/Bash-practice/backups/backup-2025-11-03-1530.tar.gz
+[INFO] Generating checksum...
+[SUCCESS] Checksum verified successfully.
+[INFO] Cleaning old backups...
+[DONE] Backup process completed successfully.
 ```
 
-### 5️⃣ List Existing Backups
+---
+
+### 3️⃣ Check Log Files
+
+All backup logs are stored automatically in the `logs/` folder:
 
 ```bash
-ls -lh backups/
-```
-
-### 6️⃣ Restore (optional — if added later)
-
-```bash
-./backup.sh --restore backup-2025-11-03-1430.tar.gz --to /home/user/restore_folder
+cat logs/backup_2025-11-03.log
 ```
 
 ---
 
-## 🔄 How It Works
+## 🧹 Cleanup & Retention Policy
 
-### 🔹 Backup Creation
-
-* The script uses the `tar` command to compress files into `.tar.gz`.
-* Excluded patterns (like `.git` or `node_modules`) are skipped.
-* Each backup is named using date and time:
-
-  ```
-  backup-2025-11-03-1430.tar.gz
-  ```
-
-### 🔹 Checksum Verification
-
-After creation, the script generates a SHA256 checksum:
-
-```
-sha256sum backup-2025-11-03-1430.tar.gz > backup-2025-11-03-1430.tar.gz.sha256
-```
-
-Then verifies it to ensure data integrity.
-
-### 🔹 Backup Retention Policy
-
-Old backups are automatically deleted:
-
-* Keep **7 daily**, **4 weekly**, and **3 monthly** backups.
-* The script lists files by date and removes older ones beyond the retention limits.
-
-### 🔹 Lock Mechanism
-
-Prevents accidental double runs using:
-
-```
-/tmp/backup.lock
-```
+The script automatically removes backups older than **30 days**.
+You can customize this in the script or config file as per your needs.
 
 ---
 
-## 🧠 Design Decisions
+## 🧑‍💻 Contributing
 
-| Feature          | Reason                                          |
-| ---------------- | ----------------------------------------------- |
-| `.tar.gz` format | Universally supported and efficient             |
-| SHA256 checksum  | Strong integrity verification                   |
-| Config file      | Easier customization without editing the script |
-| Dry-run mode     | Safe testing before running backups             |
-| Lock file        | Avoids corrupted or overlapping backups         |
+Feel free to fork this repository and enhance the script — add email alerts, S3 uploads, or cron job scheduling!
 
 ---
 
-## 🧪 Testing Examples
+## 🪪 License
 
-1. **Test Backup Creation**
-
-   ```bash
-   mkdir -p test_data
-   echo "File1" > test_data/a.txt
-   ./backup.sh ./test_data
-   ```
-
-2. **Simulate Multiple Backups**
-   Run script several times with different timestamps to test auto-deletion.
-
-3. **Checksum Test**
-   Modify a `.tar.gz` file and re-run the checksum verification — it should fail.
-
-4. **Error Handling Tests**
-
-   ```bash
-   ./backup.sh /folder/does/not/exist
-   ```
-
-   Expected:
-
-   ```
-   Error: Source folder not found (/folder/does/not/exist)
-   ```
+This project is open-source and available under the **MIT License**.
 
 ---
 
-## ⚠️ Known Limitations
+**Author:** [Rahul Sayya](https://github.com/Sayyarahul)
+**Version:** 2.0
+**Repository:** [Sayyarahul/DevOps-Practice-Test-1](https://github.com/Sayyarahul/DevOps-Practice-Test-1)
 
-* Incremental backups (only changed files) are not implemented yet.
-* Restore feature (`--restore`) optional.
-* Email notifications not yet configured (can be simulated).
-* Works best on Linux or Git Bash on Windows (tested on both).
-
----
-
-## 🏗️ Future Improvements
-
-* Add automatic email notifications.
-* Implement incremental backups using `rsync`.
-* Store logs in `backup.log` with timestamped entries.
-* Add compression-level configuration.
-
----
-
-## 🧾 Example Log Output
-
-```
-[2025-11-03 14:30:15] INFO: Starting backup of /home/user/documents
-[2025-11-03 14:30:45] SUCCESS: Backup created: backup-2025-11-03-1430.tar.gz
-[2025-11-03 14:30:46] INFO: Checksum verified successfully
-[2025-11-03 14:30:50] INFO: Deleted old backup: backup-2025-10-05-0900.tar.gz
-```
-
----
-
-## 👨‍💻 Author
-
-**Rahul Sayya**
-DevOps & Bash Automation Enthusiast 🚀
-GitHub: [https://github.com/Sayyarahul](https://github.com/Sayyarahul)
-
----
-
-## 💡 Tip
-
-> Start small, test often, and commit to GitHub frequently.
-> Simple, working automation is better than complex, broken code.
-=======
-Project Test
->>>>>>> f64cc2017eb0bc7a3f6f5564c12a08095b529af3
