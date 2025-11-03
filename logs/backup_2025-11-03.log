@@ -1,0 +1,12 @@
+==========================================================
+[INFO] Backup started at: Mon, Nov  3, 2025 16:13:15
+==========================================================
+[INFO] Dry run mode enabled
+[INFO] Would backup folder: /c/Users/Rahul Sayya/Bash-practice/test_data
+[INFO] Would save backup to: /c/Users/Rahul Sayya/Bash-practice/backups
+[INFO] Would skip patterns: .git,node_modules,.cache
+[INFO] Would keep daily=7 weekly=4 monthly=3
+[INFO] Logs are stored at: ./logs/backup_2025-11-03.log
+==========================================================
+[INFO] Dry run completed at: Mon, Nov  3, 2025 16:13:15
+==========================================================
