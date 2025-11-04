@@ -129,4 +129,6 @@ This project is open-source and available under the **MIT License**.
 **Author:** [Rahul Sayya](https://github.com/Sayyarahul)
 **Version:** 2.0
 **Repository:** [Sayyarahul/DevOps-Practice-Test-1](https://github.com/Sayyarahul/DevOps-Practice-Test-1)
+![Dry run](docs/images/dry-run.png)
+![Backup success](docs/images/backup-success.png)
 
