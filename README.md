@@ -131,4 +131,17 @@ This project is open-source and available under the **MIT License**.
 **Repository:** [Sayyarahul/DevOps-Practice-Test-1](https://github.com/Sayyarahul/DevOps-Practice-Test-1)
 ![Dry run](docs/images/dry-run.png)
 ![Backup success](docs/images/backup-success.png)
+## 📸 Screenshots
+
+**Dry Run Mode**  
+![Dry Run](docs/images/dry_run_155620.png)
+
+**Real Backup Execution**  
+![Real Backup](docs/images/real_backup_155640.png)
+
+**Backups Folder**  
+![Backups Folder](docs/images/backups_folder_155702.png)
+
+**Logs Folder**  
+![Logs Folder](docs/images/logs_folder_155712.png)
 
