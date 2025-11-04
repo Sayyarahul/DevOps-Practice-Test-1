@@ -1,4 +1,18 @@
 # 🧰 Bash Backup Automation Script (v2.0)
+<p align="center">
+  <img src="https://img.shields.io/badge/Built%20With-Bash-blue?style=for-the-badge" alt="Built with Bash"/>
+  <img src="https://img.shields.io/badge/Automation-Fully%20Automated-success?style=for-the-badge" alt="Automation"/>
+  <img src="https://img.shields.io/badge/Integrity-Checksum%20Verified-brightgreen?style=for-the-badge" alt="Checksum"/>
+  <img src="https://img.shields.io/badge/Logs-Enabled-lightgrey?style=for-the-badge" alt="Logs Enabled"/>
+  <img src="https://img.shields.io/badge/Retention-Auto%20Cleanup-yellow?style=for-the-badge" alt="Auto Cleanup"/>
+  <img src="https://img.shields.io/github/last-commit/Sayyarahul/DevOps-Practice-Test-1?style=for-the-badge" alt="Last Commit"/>
+  <img src="https://img.shields.io/badge/License-MIT-orange?style=for-the-badge" alt="License"/>
+</p>
+
+---
+
+# 🧰 Bash Backup Automation System
+
 
 A simple yet powerful **backup automation system** written in Bash.
 It supports **dry-run mode**, **log generation**, **checksum verification**, and **automatic cleanup** of old backups.
