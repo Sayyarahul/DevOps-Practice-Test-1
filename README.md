@@ -159,3 +159,8 @@ This project is open-source and available under the **MIT License**.
 **Logs Folder**  
 ![Logs Folder](docs/images/logs_folder_155712.png)
 
+ Author
+ Developed by: Rahul Sayya
+ Instructor: FAVOUR LAWRENCE
+ Year: 2025
+ GitHub: https://github.com/Sayyarahul/DevOps-Practice-Test-1
