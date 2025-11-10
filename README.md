@@ -1,4 +1,4 @@
-# 🧰 Bash Backup Automation Script (v2.0)
+#  Bash Backup Automation Script (v2.0)
 <p align="center">
   <img src="https://img.shields.io/badge/Built%20With-Bash-blue?style=for-the-badge" alt="Built with Bash"/>
   <img src="https://img.shields.io/badge/Automation-Fully%20Automated-success?style=for-the-badge" alt="Automation"/>
@@ -11,7 +11,7 @@
 
 ---
 
-# 🧰 Bash Backup Automation System
+#  Bash Backup Automation System
 
 
 A simple yet powerful **backup automation system** written in Bash.
@@ -19,18 +19,18 @@ It supports **dry-run mode**, **log generation**, **checksum verification**, and
 
 ---
 
-## 🚀 Features
+##  Features
 
-✅ Dry-run mode (safe preview before running real backups)
-✅ Auto-generated logs (`logs/backup_YYYY-MM-DD.log`)
-✅ SHA256 checksum verification for data integrity
-✅ Configurable retention policy (daily, weekly, monthly)
-✅ Exclusion patterns (`.git`, `node_modules`, etc.)
-✅ Works on Linux, macOS, and Git Bash for Windows
+ Dry-run mode (safe preview before running real backups)
+ Auto-generated logs (`logs/backup_YYYY-MM-DD.log`)
+ SHA256 checksum verification for data integrity
+ Configurable retention policy (daily, weekly, monthly)
+ Exclusion patterns (`.git`, `node_modules`, etc.)
+ Works on Linux, macOS, and Git Bash for Windows
 
 ---
 
-## 📦 Project Structure
+##  Project Structure
 
 ```
 Bash-practice/
@@ -44,7 +44,7 @@ Bash-practice/
 
 ---
 
-## ⚙️ Configuration (`backup.config`)
+##  Configuration (`backup.config`)
 
 Example:
 
@@ -70,9 +70,9 @@ CHECKSUM_CMD=sha256sum
 
 ---
 
-## 🧠 Usage
+##  Usage
 
-### 1️⃣ Run in **Dry Run Mode** (Test only)
+### 1️ Run in **Dry Run Mode** (Test only)
 
 ```bash
 ./backup.sh --dry-run /c/Users/Rahul\ Sayya/Bash-practice/test_data
@@ -92,7 +92,7 @@ A dry run **does not create** any backup files — it only previews what will ha
 
 ---
 
-### 2️⃣ Run Real Backup
+### 2️ Run Real Backup
 
 ```bash
 ./backup.sh /c/Users/Rahul\ Sayya/Bash-practice/test_data
@@ -111,7 +111,7 @@ Expected output:
 
 ---
 
-### 3️⃣ Check Log Files
+### 3️ Check Log Files
 
 All backup logs are stored automatically in the `logs/` folder:
 
@@ -121,20 +121,20 @@ cat logs/backup_2025-11-03.log
 
 ---
 
-## 🧹 Cleanup & Retention Policy
+##  Cleanup & Retention Policy
 
 The script automatically removes backups older than **30 days**.
 You can customize this in the script or config file as per your needs.
 
 ---
 
-## 🧑‍💻 Contributing
+##  Contributing
 
 Feel free to fork this repository and enhance the script — add email alerts, S3 uploads, or cron job scheduling!
 
 ---
 
-## 🪪 License
+##  License
 
 This project is open-source and available under the **MIT License**.
 
@@ -145,7 +145,7 @@ This project is open-source and available under the **MIT License**.
 **Repository:** [Sayyarahul/DevOps-Practice-Test-1](https://github.com/Sayyarahul/DevOps-Practice-Test-1)
 ![Dry run](docs/images/dry-run.png)
 ![Backup success](docs/images/backup-success.png)
-## 📸 Screenshots
+##  Screenshots
 
 **Dry Run Mode**  
 ![Dry Run](docs/images/dry_run_155620.png)
