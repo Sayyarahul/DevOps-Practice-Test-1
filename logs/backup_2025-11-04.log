@@ -52,3 +52,62 @@ tar: Removing leading `/' from member names
 [INFO] Backup completed successfully at: Tue, Nov  4, 2025 12:54:34
 [INFO] Log saved to: ./logs/backup_2025-11-04.log
 ==========================================================
+==========================================================
+[INFO] Backup started at: Tue, Nov  4, 2025 14:20:53
+==========================================================
+[INFO] Dry run mode enabled
+[INFO] Would backup folder: /c/Users/Rahul Sayya/Bash-practice/test_data
+[INFO] Would save backup to: /c/Users/Rahul Sayya/Bash-practice/backups
+[INFO] Would skip patterns: .git,node_modules,.cache
+[INFO] Would keep daily=7 weekly=4 monthly=3
+[INFO] Log file: ./logs/backup_2025-11-04.log
+==========================================================
+[INFO] Dry run completed at: Tue, Nov  4, 2025 14:20:53
+==========================================================
+==========================================================
+[INFO] Backup started at: Tue, Nov  4, 2025 14:21:09
+==========================================================
+[INFO] Creating backup archive...
+tar: Removing leading `/' from member names
+[SUCCESS] Backup created: /c/Users/Rahul Sayya/Bash-practice/backups/backup-2025-11-04-1421.tar.gz
+[INFO] Generating checksum...
+[INFO] Verifying backup integrity...
+/c/Users/Rahul Sayya/Bash-practice/backups/backup-2025-11-04-1421.tar.gz: OK
+[SUCCESS] Checksum verified successfully.
+[INFO] Applying retention policy...
+[INFO] Found 4 daily backups. Nothing to delete.
+[INFO] Retention policy applied successfully.
+[SUCCESS] Backup completed successfully at: Tue, Nov  4, 2025 14:21:10
+[INFO] Log saved to: ./logs/backup_2025-11-04.log
+==========================================================
+==========================================================
+[INFO] Backup started at: Tue, Nov  4, 2025 14:31:10
+==========================================================
+[INFO] Dry run mode enabled
+[INFO] Would backup folder: /c/Users/Rahul Sayya/Bash-practice/test_data
+[INFO] Would save backup to: /c/Users/Rahul Sayya/Bash-practice/backups
+[INFO] Would skip patterns: .git,node_modules,.cache
+[INFO] Would keep daily=7 weekly=4 monthly=3
+[INFO] Log file: ./logs/backup_2025-11-04.log
+==========================================================
+==========================================================
+[INFO] Backup started at: Tue, Nov  4, 2025 14:31:38
+==========================================================
+[INFO] Creating backup archive...
+tar: Removing leading `/' from member names
+[SUCCESS] Backup created: /c/Users/Rahul Sayya/Bash-practice/backups/backup-2025-11-04-1431.tar.gz
+[INFO] Generating checksum...
+[INFO] Verifying backup integrity...
+/c/Users/Rahul Sayya/Bash-practice/backups/backup-2025-11-04-1431.tar.gz: OK
+[SUCCESS] Checksum verified successfully.
+[INFO] Applying automatic cleanup at Tue, Nov  4, 2025 14:31:39...
+[INFO] Found 1 daily backups. Nothing to delete.
+[INFO] Found 5 daily checksum backups. Nothing to delete.
+[INFO] Checking weekly backups...
+[INFO] Checking monthly backups...
+[INFO] Cleanup completed successfully at Tue, Nov  4, 2025 14:31:39
+[INFO] Retention policy applied successfully.
+==========================================================
+[SUCCESS] Backup process completed successfully at: Tue, Nov  4, 2025 14:31:39
+[INFO] Log saved to: ./logs/backup_2025-11-04.log
+==========================================================

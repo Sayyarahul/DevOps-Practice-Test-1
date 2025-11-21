@@ -1,154 +1,184 @@
 #!/usr/bin/env bash
-# ==========================================================
-# Bash Backup Automation Script (Automatic Cleanup Version)
-# Author: Rahul Sayya
-# Version: v4.0 (Auto Delete + Real-Time Log)
-# ==========================================================
-
 set -euo pipefail
 
-# ----------------------------------------------------------
-# Load Configuration
-# ----------------------------------------------------------
+# ==========================================================
+# Bash Automated Backup System - v5.0 (Full Features)
+# Author: Rahul Sayya
+# ==========================================================
+
+LOCK_FILE="/tmp/backup.lock"
+
+# Lock File Protection
+if [[ -f "$LOCK_FILE" ]]; then
+    echo "[ERROR] Another backup is already running!"
+    exit 1
+fi
+trap "rm -f $LOCK_FILE" EXIT
+touch "$LOCK_FILE"
+
+# Load Config
 CONFIG_FILE="./backup.config"
 if [[ ! -f "$CONFIG_FILE" ]]; then
-    echo "Error: Configuration file not found ($CONFIG_FILE)"
+    echo "[ERROR] Missing config file: backup.config"
     exit 1
 fi
 source "$CONFIG_FILE"
 
-# ----------------------------------------------------------
-# Logging Setup
-# ----------------------------------------------------------
+# Log Setup
 LOG_DIR="./logs"
 mkdir -p "$LOG_DIR"
 LOG_FILE="$LOG_DIR/backup_$(date +'%Y-%m-%d').log"
-exec > >(tee -a "$LOG_FILE") 2>&1
+log() {
+    echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1: $2" | tee -a "$LOG_FILE"
+}
 
-echo "=========================================================="
-echo "[INFO] Backup started at: $(date)"
-echo "=========================================================="
+log "INFO" "Backup script started"
 
-# ----------------------------------------------------------
-# Dry Run Mode
-# ----------------------------------------------------------
-if [[ "${1:-}" == "--dry-run" ]]; then
-    SOURCE_DIR="${2:-}"
-    echo "[INFO] Dry run mode enabled"
-    echo "[INFO] Would backup folder: $SOURCE_DIR"
-    echo "[INFO] Would save backup to: $BACKUP_DESTINATION"
-    echo "[INFO] Would skip patterns: $EXCLUDE_PATTERNS"
-    echo "[INFO] Would keep daily=$DAILY_KEEP weekly=$WEEKLY_KEEP monthly=$MONTHLY_KEEP"
-    echo "[INFO] Log file: $LOG_FILE"
-    echo "=========================================================="
+# ==========================================================
+# Command: --list
+# ==========================================================
+if [[ "${1:-}" == "--list" ]]; then
+    log "INFO" "Listing available backups..."
+    ls -lh "$BACKUP_DESTINATION"
     exit 0
 fi
 
-# ----------------------------------------------------------
-# Validate Source Folder
-# ----------------------------------------------------------
+# ==========================================================
+# Command: --restore
+# ==========================================================
+if [[ "${1:-}" == "--restore" ]]; then
+    BACKUP_FILE="$2"
+    if [[ "${3:-}" != "--to" ]]; then
+        echo "[ERROR] Usage: ./backup.sh --restore <file> --to <folder>"
+        exit 1
+    fi
+    RESTORE_PATH="$4"
+
+    restore_backup() {
+        local backup_file="$1"
+        local restore_dest="$2"
+
+        log "INFO" "Restore requested. Backup: $backup_file → Destination: $restore_dest"
+
+        # Check backup exists
+        if [[ ! -f "$backup_file" ]]; then
+            log "ERROR" "Backup file not found ($backup_file)"
+            echo "[ERROR] Backup file not found ($backup_file)"
+            exit 1
+        fi
+
+        # Create restore directory
+        if [[ ! -d "$restore_dest" ]]; then
+            log "INFO" "Restore directory missing. Creating it..."
+            mkdir -p "$restore_dest" 2>/dev/null || {
+                echo "[ERROR] Permission denied creating restore directory"
+                exit 1
+            }
+        fi
+
+        # Verify checksum
+        if [[ -f "${backup_file}.sha256" ]]; then
+            log "INFO" "Verifying checksum..."
+            if ! sha256sum -c "${backup_file}.sha256" >/dev/null 2>&1; then
+                log "ERROR" "Checksum verification failed!"
+                exit 1
+            fi
+            log "SUCCESS" "Checksum OK"
+        fi
+
+        # Extract backup
+        log "INFO" "Extracting backup..."
+        if ! tar -xzf "$backup_file" -C "$restore_dest"; then
+            log "ERROR" "Restore failed!"
+            exit 1
+        fi
+
+        log "SUCCESS" "Restore completed successfully!"
+        echo "[SUCCESS] Restore completed!"
+    }
+
+    restore_backup "$BACKUP_FILE" "$RESTORE_PATH"
+    exit 0
+fi
+
+# ==========================================================
+# Command: --dry-run
+# ==========================================================
+if [[ "${1:-}" == "--dry-run" ]]; then
+    SOURCE_DIR="$2"
+    log "INFO" "Dry Run Mode Enabled"
+    log "INFO" "Would backup: $SOURCE_DIR"
+    log "INFO" "Would save to: $BACKUP_DESTINATION"
+    log "INFO" "Excluding: $EXCLUDE_PATTERNS"
+    log "INFO" "Retention: daily=$DAILY_KEEP weekly=$WEEKLY_KEEP monthly=$MONTHLY_KEEP"
+    exit 0
+fi
+
+# ==========================================================
+# Regular Backup Mode
+# ==========================================================
 SOURCE_DIR="${1:-}"
+
 if [[ ! -d "$SOURCE_DIR" ]]; then
-    echo "Error: Source folder not found ($SOURCE_DIR)"
+    log "ERROR" "Source folder not found ($SOURCE_DIR)"
+    echo "[ERROR] Source folder not found ($SOURCE_DIR)"
     exit 1
 fi
 
-# ----------------------------------------------------------
-# Prepare Destination
-# ----------------------------------------------------------
 mkdir -p "$BACKUP_DESTINATION"
-cd "$BACKUP_DESTINATION"
-
-# ----------------------------------------------------------
-# Create Backup
-# ----------------------------------------------------------
 TIMESTAMP=$(date +'%Y-%m-%d-%H%M')
-BACKUP_NAME="backup-$TIMESTAMP.tar.gz"
-BACKUP_PATH="$BACKUP_DESTINATION/$BACKUP_NAME"
+BACKUP_FILE="backup-${TIMESTAMP}.tar.gz"
+BACKUP_PATH="$BACKUP_DESTINATION/$BACKUP_FILE"
 
-echo "[INFO] Creating backup archive..."
+log "INFO" "Creating backup: $BACKUP_PATH"
+
 tar --exclude={${EXCLUDE_PATTERNS}} -czf "$BACKUP_PATH" "$SOURCE_DIR"
-echo "[SUCCESS] Backup created: $BACKUP_PATH"
+log "SUCCESS" "Backup created: $BACKUP_PATH"
 
-# ----------------------------------------------------------
-# Generate and Verify Checksum
-# ----------------------------------------------------------
-CHECKSUM_FILE="$BACKUP_PATH.sha256"
-echo "[INFO] Generating checksum..."
-$CHECKSUM_CMD "$BACKUP_PATH" > "$CHECKSUM_FILE"
+# Checksum
+log "INFO" "Generating checksum..."
+sha256sum "$BACKUP_PATH" > "${BACKUP_PATH}.sha256"
 
-echo "[INFO] Verifying backup integrity..."
-$CHECKSUM_CMD -c "$CHECKSUM_FILE"
-echo "[SUCCESS] Checksum verified successfully."
+log "INFO" "Verifying checksum..."
+sha256sum -c "${BACKUP_PATH}.sha256"
 
-# ----------------------------------------------------------
-# Automatic Cleanup (Daily, Weekly, Monthly)
-# ----------------------------------------------------------
-echo "[INFO] Applying automatic cleanup at $(date)..."
+# Verify extraction
+log "INFO" "Testing extraction..."
+TEMP_DIR="/tmp/test_extract_$$"
+mkdir "$TEMP_DIR"
+tar -xzf "$BACKUP_PATH" -C "$TEMP_DIR"
+rm -rf "$TEMP_DIR"
+log "SUCCESS" "Extraction test passed!"
 
-keep_latest() {
-    local PATTERN=$1
-    local KEEP=$2
-    local LABEL=$3
-    local COUNT
-    COUNT=$(ls -tp $PATTERN 2>/dev/null | wc -l || true)
+# ==========================================================
+# Cleanup (Daily, Weekly, Monthly)
+# ==========================================================
+log "INFO" "Cleaning old backups..."
+
+delete_old() {
+    PATTERN="$1"
+    KEEP="$2"
+    LABEL="$3"
+
+    FILES=($(ls -1t $PATTERN 2>/dev/null))
+    COUNT=${#FILES[@]}
 
     if (( COUNT > KEEP )); then
-        local DELETE_COUNT=$((COUNT - KEEP))
-        echo "[INFO] Found $COUNT $LABEL backups. Keeping $KEEP, deleting $DELETE_COUNT older backups."
-        ls -tp $PATTERN | tail -n +$((KEEP+1)) | while read -r file; do
-            echo "[INFO] Deleting old $LABEL backup: $file"
-            rm -f -- "$file"
+        for ((i=KEEP; i<COUNT; i++)); do
+            log "INFO" "Deleting old $LABEL backup: ${FILES[$i]}"
+            rm -f "${FILES[$i]}"
         done
-    else
-        echo "[INFO] Found $COUNT $LABEL backups. Nothing to delete."
     fi
 }
 
-# Keep 7 daily backups
-keep_latest "backup-*.tar.gz" "$DAILY_KEEP" "daily"
-keep_latest "backup-*.tar.gz.sha256" "$DAILY_KEEP" "daily checksum"
+cd "$BACKUP_DESTINATION"
+delete_old "backup-*.tar.gz" "$DAILY_KEEP" "daily"
+delete_old "backup-*.sha256" "$DAILY_KEEP" "daily checksum"
 
-# Keep 4 weekly backups
-echo "[INFO] Checking weekly backups..."
-find . -type f -name "backup-*.tar.gz" -printf "%T@ %p\n" | sort -nr | \
-awk -v limit="$WEEKLY_KEEP" '
-{
-  cmd = "date -d @"$1" +%Y-%V"
-  cmd | getline week
-  close(cmd)
-  if (!(week in seen) && (length(seen) < limit)) seen[week] = $2
-  else print $2
-}' | while read -r oldfile; do
-    echo "[INFO] Deleting old weekly backup: $oldfile"
-    rm -f -- "$oldfile"
-done
+log "SUCCESS" "Backup completed!"
+log "INFO" "Logs saved to $LOG_FILE"
 
-# Keep 3 monthly backups
-echo "[INFO] Checking monthly backups..."
-find . -type f -name "backup-*.tar.gz" -printf "%T@ %p\n" | sort -nr | \
-awk -v limit="$MONTHLY_KEEP" '
-{
-  cmd = "date -d @"$1" +%Y-%m"
-  cmd | getline month
-  close(cmd)
-  if (!(month in seen) && (length(seen) < limit)) seen[month] = $2
-  else print $2
-}' | while read -r oldfile; do
-    echo "[INFO] Deleting old monthly backup: $oldfile"
-    rm -f -- "$oldfile"
-done
-
-echo "[INFO] Cleanup completed successfully at $(date)"
-echo "[INFO] Retention policy applied successfully."
-
-# ----------------------------------------------------------
-# Finish
-# ----------------------------------------------------------
-echo "=========================================================="
-echo "[SUCCESS] Backup process completed successfully at: $(date)"
-echo "[INFO] Log saved to: $LOG_FILE"
-echo "=========================================================="
+exit 0
 
 
 

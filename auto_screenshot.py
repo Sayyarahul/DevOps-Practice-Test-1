@@ -103,7 +103,7 @@ run_and_capture(
     2
 )
 
-print("\n✅ All screenshots captured with timestamp and labels successfully!")
+print("\n All screenshots captured with timestamp and labels successfully!")
 
 
 

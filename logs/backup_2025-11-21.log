@@ -1,0 +1,68 @@
+==========================================================
+[INFO] Backup started at: Fri, Nov 21, 2025 11:22:58
+==========================================================
+Error: Source folder not found (--restore)
+[2025-11-21 11:29:37] INFO: Dry run mode enabled.
+[2025-11-21 11:29:38] INFO: Would back up: /c/Users/Rahul Sayya/Bash-practice/test_data
+[2025-11-21 11:29:38] INFO: Would skip: .git,node_modules,.cache
+[2025-11-21 11:29:38] INFO: Would save to: /c/Users/Rahul Sayya/Bash-practice/backups
+[2025-11-21 11:29:46] INFO: Creating backup: /c/Users/Rahul Sayya/Bash-practice/backups/backup-2025-11-21-1129.tar.gz
+[2025-11-21 11:29:47] SUCCESS: Backup created: /c/Users/Rahul Sayya/Bash-practice/backups/backup-2025-11-21-1129.tar.gz
+[2025-11-21 11:29:47] INFO: Checksum generated.
+[2025-11-21 11:29:47] INFO: Verifying checksum...
+[2025-11-21 11:29:47] SUCCESS: Checksum verified!
+[2025-11-21 11:29:47] SUCCESS: Test extraction successful!
+[2025-11-21 11:29:47] INFO: Rotating old backups...
+[2025-11-21 11:29:48] INFO: Old backups deleted.
+[2025-11-21 11:30:17] ERROR: Backup file not found (backups/backup-2025-11-03-1530.tar.gz)
+[2025-11-21 11:35:35] ERROR: Backup file not found (backups/backup-YYYY-MM-DD-HHMM.tar.gz)
+[2025-11-21 11:39:22] INFO: Backup script started
+[2025-11-21 11:39:22] INFO: Restore requested. Backup: backups/backup-2025-11-21-1129.tar.gz → Destination: /restore/location
+[2025-11-21 11:39:22] INFO: Restore directory missing. Creating it...
+[2025-11-21 11:40:40] INFO: Backup script started
+[2025-11-21 11:40:40] INFO: Restore requested. Backup: backups/backup-2025-11-21-1129.tar.gz → Destination: restore_folder
+[2025-11-21 11:40:40] INFO: Restore directory missing. Creating it...
+[2025-11-21 11:40:40] INFO: Verifying checksum before extraction...
+[2025-11-21 11:40:40] SUCCESS: Checksum verification passed.
+[2025-11-21 11:40:40] INFO: Extracting backup...
+[2025-11-21 11:40:40] SUCCESS: Restore completed successfully!
+[2025-11-21 11:41:19] INFO: Backup script started
+[2025-11-21 11:41:19] INFO: Restore requested. Backup: backups/backup-2025-11-21-1129.tar.gz → Destination: ./restored_files
+[2025-11-21 11:41:19] INFO: Restore directory missing. Creating it...
+[2025-11-21 11:41:19] INFO: Verifying checksum before extraction...
+[2025-11-21 11:41:19] SUCCESS: Checksum verification passed.
+[2025-11-21 11:41:19] INFO: Extracting backup...
+[2025-11-21 11:41:19] SUCCESS: Restore completed successfully!
+[2025-11-21 11:41:49] INFO: Backup script started
+[2025-11-21 11:41:49] INFO: Restore requested. Backup: backups/backup-2025-11-21-1129.tar.gz → Destination: ./restored_output
+[2025-11-21 11:41:49] INFO: Restore directory missing. Creating it...
+[2025-11-21 11:41:49] INFO: Verifying checksum before extraction...
+[2025-11-21 11:41:49] SUCCESS: Checksum verification passed.
+[2025-11-21 11:41:49] INFO: Extracting backup...
+[2025-11-21 11:41:49] SUCCESS: Restore completed successfully!
+[2025-11-21 11:50:51] INFO: Backup script started
+[2025-11-21 11:50:51] INFO: Restore requested. Backup: backups/backup-2025-11-21-1129.tar.gz → Destination: /c/Users/Rahul Sayya/Bash-practice/restore_here
+[2025-11-21 11:50:51] INFO: Restore directory missing. Creating it...
+[2025-11-21 11:50:51] INFO: Verifying checksum before extraction...
+[2025-11-21 11:50:51] SUCCESS: Checksum verification passed.
+[2025-11-21 11:50:51] INFO: Extracting backup...
+[2025-11-21 11:50:52] SUCCESS: Restore completed successfully!
+[2025-11-21 11:51:10] INFO: Backup script started
+[2025-11-21 11:51:10] ERROR: Source folder not found (--list)
+[2025-11-21 11:52:04] INFO: Backup script started
+[2025-11-21 11:52:04] INFO: Restore requested. Backup: backups/backup-2025-11-21-1129.tar.gz → Destination: /c/Users/Rahul Sayya/restore_here
+[2025-11-21 11:52:04] INFO: Restore directory missing. Creating it...
+[2025-11-21 11:52:04] INFO: Verifying checksum before extraction...
+[2025-11-21 11:52:05] SUCCESS: Checksum verification passed.
+[2025-11-21 11:52:05] INFO: Extracting backup...
+[2025-11-21 11:52:05] SUCCESS: Restore completed successfully!
+[2025-11-21 11:52:18] INFO: Backup script started
+[2025-11-21 11:52:18] ERROR: Source folder not found (--list)
+[2025-11-21 11:56:12] INFO: Backup script started
+[2025-11-21 11:56:13] ERROR: Source folder not found (/path/to/folder)
+[2025-11-21 12:00:18] INFO: Backup script started
+[2025-11-21 12:00:18] INFO: Restore requested. Backup: backups/backup-2025-11-21-1129.tar.gz → Destination: ./restored_files
+[2025-11-21 12:00:18] INFO: Verifying checksum...
+[2025-11-21 12:00:18] SUCCESS: Checksum OK
+[2025-11-21 12:00:18] INFO: Extracting backup...
+[2025-11-21 12:00:18] SUCCESS: Restore completed successfully!

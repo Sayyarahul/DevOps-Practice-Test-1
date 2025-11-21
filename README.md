@@ -1,98 +1,92 @@
-#  Bash Backup Automation Script (v2.0)
-<p align="center">
-  <img src="https://img.shields.io/badge/Built%20With-Bash-blue?style=for-the-badge" alt="Built with Bash"/>
-  <img src="https://img.shields.io/badge/Automation-Fully%20Automated-success?style=for-the-badge" alt="Automation"/>
-  <img src="https://img.shields.io/badge/Integrity-Checksum%20Verified-brightgreen?style=for-the-badge" alt="Checksum"/>
-  <img src="https://img.shields.io/badge/Logs-Enabled-lightgrey?style=for-the-badge" alt="Logs Enabled"/>
-  <img src="https://img.shields.io/badge/Retention-Auto%20Cleanup-yellow?style=for-the-badge" alt="Auto Cleanup"/>
-  <img src="https://img.shields.io/github/last-commit/Sayyarahul/DevOps-Practice-Test-1?style=for-the-badge" alt="Last Commit"/>
-  <img src="https://img.shields.io/badge/License-MIT-orange?style=for-the-badge" alt="License"/>
-</p>
+#  Automated Backup System (Bash Project)
+
+A fully automated and configurable backup system written in **Bash**, designed to create secure backups, verify integrity, rotate old backups, restore data, and prevent accidental double runs.  
+This project follows all requirements of the *Bash Scripting Project: Automated Backup System*.
 
 ---
 
-#  Bash Backup Automation System
+#  1. Project Overview
 
+This script automatically:
 
-A simple yet powerful **backup automation system** written in Bash.
-It supports **dry-run mode**, **log generation**, **checksum verification**, and **automatic cleanup** of old backups.
+✔ Creates compressed backups (`.tar.gz`)  
+✔ Generates checksum (`.sha256`)  
+✔ Verifies backup integrity  
+✔ Restores backups (using `--restore`)  
+✔ Runs in dry-run mode (safe preview)  
+✔ Deletes older backups using retention rules  
+✔ Prevents double executions using a lock file  
+✔ Stores logs for every backup job  
 
----
-
-##  Features
-
- Dry-run mode (safe preview before running real backups)
- Auto-generated logs (`logs/backup_YYYY-MM-DD.log`)
- SHA256 checksum verification for data integrity
- Configurable retention policy (daily, weekly, monthly)
- Exclusion patterns (`.git`, `node_modules`, etc.)
- Works on Linux, macOS, and Git Bash for Windows
+This makes backup management safe, simple, and reliable for DevOps / SysAdmin environments.
 
 ---
 
-##  Project Structure
+#  2. Project Structure
 
 ```
 Bash-practice/
-├── backup.sh             # Main backup script
-├── backup.config         # Configuration file
-├── backups/              # Backup storage folder
-├── logs/                 # Log files created here automatically
-├── test_data/            # Example source data folder
-└── README.md             # Documentation
+│── backup.sh            # Main script
+│── backup.config        # User configuration file
+│── backups/             # Generated backup files
+│── logs/                # Auto-generated log files
+│── test_data/           # Test folder for backups
+└── restored_files/      # Example restore location
 ```
 
 ---
 
-##  Configuration (`backup.config`)
+#  3. Configuration (backup.config)
 
-Example:
+Your script reads user settings from this file:
 
 ```bash
-# -------------------------------------
-# Backup Script Configuration
-# -------------------------------------
-
-# Destination folder where backups will be stored
 BACKUP_DESTINATION=/c/Users/Rahul\ Sayya/Bash-practice/backups
-
-# Patterns to exclude (comma-separated)
 EXCLUDE_PATTERNS=".git,node_modules,.cache"
-
-# Retention policy
 DAILY_KEEP=7
 WEEKLY_KEEP=4
 MONTHLY_KEEP=3
-
-# Command used for checksums
 CHECKSUM_CMD=sha256sum
+```
+
+Users can fully customize:
+
+- Backup location  
+- Excluded folders  
+- Retention policy  
+- Checksum command  
+
+---
+
+#  4. How to Use the Script
+
+###  1. Make the script executable
+
+```bash
+chmod +x backup.sh
 ```
 
 ---
 
-##  Usage
+###  2. Run in **Dry Run Mode**
 
-### 1️ Run in **Dry Run Mode** (Test only)
+Shows what the script *would* do:
 
 ```bash
 ./backup.sh --dry-run /c/Users/Rahul\ Sayya/Bash-practice/test_data
 ```
 
-Output example:
+Example output:
 
 ```
 [INFO] Dry run mode enabled
-[INFO] Would backup folder: /c/Users/Rahul Sayya/Bash-practice/test_data
-[INFO] Would save backup to: /c/Users/Rahul Sayya/Bash-practice/backups
-[INFO] Would skip patterns: .git,node_modules,.cache
-[INFO] Would keep daily=7 weekly=4 monthly=3
+[INFO] Would backup folder: test_data
+[INFO] Would skip: .git,node_modules,.cache
 ```
-
-A dry run **does not create** any backup files — it only previews what will happen.
 
 ---
 
-### 2️ Run Real Backup
+###  3. Create a Real Backup
 
 ```bash
 ./backup.sh /c/Users/Rahul\ Sayya/Bash-practice/test_data
@@ -101,66 +95,189 @@ A dry run **does not create** any backup files — it only previews what will ha
 Expected output:
 
 ```
-[INFO] Creating backup archive...
-[INFO] Backup created: /c/Users/Rahul Sayya/Bash-practice/backups/backup-2025-11-03-1530.tar.gz
-[INFO] Generating checksum...
-[SUCCESS] Checksum verified successfully.
-[INFO] Cleaning old backups...
-[DONE] Backup process completed successfully.
+[INFO] Creating backup...
+[SUCCESS] Backup created: backup-2025-11-21-1129.tar.gz
+[SUCCESS] Checksum verified
 ```
 
 ---
 
-### 3️ Check Log Files
-
-All backup logs are stored automatically in the `logs/` folder:
+###  4. Restore From a Backup
 
 ```bash
-cat logs/backup_2025-11-03.log
+./backup.sh --restore backups/backup-2025-11-21-1129.tar.gz --to ./restored_files
+```
+
+Output:
+
+```
+[SUCCESS] Restore completed successfully!
 ```
 
 ---
 
-##  Cleanup & Retention Policy
+###  5. List All Backups (if implemented)
 
-The script automatically removes backups older than **30 days**.
-You can customize this in the script or config file as per your needs.
-
----
-
-##  Contributing
-
-Feel free to fork this repository and enhance the script — add email alerts, S3 uploads, or cron job scheduling!
+```bash
+./backup.sh --list
+```
 
 ---
 
-##  License
+#  5. How It Works
 
-This project is open-source and available under the **MIT License**.
+###  A. Backup Creation
+
+- Uses `tar -czf` to compress the source folder into `.tar.gz`
+- Skips excluded patterns
+- Names backups using timestamp:
+
+```
+backup-YYYY-MM-DD-HHMM.tar.gz
+```
 
 ---
 
-**Author:** [Rahul Sayya](https://github.com/Sayyarahul)
-**Version:** 2.0
-**Repository:** [Sayyarahul/DevOps-Practice-Test-1](https://github.com/Sayyarahul/DevOps-Practice-Test-1)
-![Dry run](docs/images/dry-run.png)
-![Backup success](docs/images/backup-success.png)
-##  Screenshots
+###  B. Integrity Verification
 
-**Dry Run Mode**  
-![Dry Run](docs/images/dry_run_155620.png)
+After creation:
 
-**Real Backup Execution**  
-![Real Backup](docs/images/real_backup_155640.png)
+```bash
+sha256sum backup.tar.gz > backup.tar.gz.sha256
+sha256sum -c backup.tar.gz.sha256
+```
 
-**Backups Folder**  
-![Backups Folder](docs/images/backups_folder_155702.png)
+Ensures no corruption.
 
-**Logs Folder**  
-![Logs Folder](docs/images/logs_folder_155712.png)
+---
 
- Author
- Developed by: Rahul Sayya
- Instructor: FAVOUR LAWRENCE
- Year: 2025
- GitHub: https://github.com/Sayyarahul/DevOps-Practice-Test-1
+###  C. Retention Policy (Auto-Delete Old Backups)
+
+Your script keeps:
+
+- **7 daily backups**  
+- **4 weekly backups**  
+- **3 monthly backups**
+
+Everything older is automatically removed.
+
+---
+
+###  D. Lock File Protection
+
+Prevents accidental double-run:
+
+```
+/tmp/backup.lock
+```
+
+If lock exists → script exits.
+
+---
+
+#  6. Design Decisions
+
+| Feature | Why it’s used |
+|--------|----------------|
+| `.tar.gz` format | Fast, universal, efficient |
+| SHA256 checksum | Strong integrity check |
+| Config file | Users can customize without editing script |
+| Logging | Audit trail for backup jobs |
+| Lock file | Prevents duplicate runs and corrupted backups |
+| Test extraction | Validates backup contents |
+
+---
+
+#  7. Testing
+
+###  Backup creation test
+
+```bash
+./backup.sh test_data/
+```
+
+###  Simulated multiple backups  
+Create backups at different times → verify cleanup runs correctly.
+
+###  Dry run tests  
+Ensures nothing is created.
+
+###  Error handling
+
+```bash
+./backup.sh /does/not/exist
+```
+
+Expected:
+
+```
+Error: Source folder not found
+```
+
+###  Restore test
+
+```bash
+./backup.sh --restore backups/backup-time.tar.gz --to restored_files
+```
+
+---
+
+#  8. Known Limitations
+
+- Incremental backups not included (bonus feature)
+- Email notifications not added
+- Disk space check not implemented
+- Listing backups (`--list`) optional
+
+---
+
+#  9. Example Log Output
+
+```
+[2025-11-21 11:29:47] INFO: Creating backup: backup-2025-11-21-1129.tar.gz
+[2025-11-21 11:29:47] SUCCESS: Backup created
+[2025-11-21 11:29:47] INFO: Checksum verified
+[2025-11-21 11:29:47] INFO: Cleanup completed
+```
+
+---
+
+#  10. Author
+
+**Name:** Rahul Sayya  
+**GitHub:** https://github.com/Sayyarahul  
+**Year:** 2025  
+**Project Version:** 4.0  
+
+---
+
+# 11. How to Push to GitHub
+
+Inside your project folder:
+
+```bash
+git init
+git add .
+git commit -m "Initial commit - Backup automation system"
+git branch -M main
+git remote add origin https://github.com/Sayyarahul/DevOps-Practice-Test-1.git
+git push -u origin main
+```
+
+---
+
+# Project Completed Successfully!
+
+Your script includes:
+
+✔ Backup creation  
+✔ Checksum generation  
+✔ Checksum verification  
+✔ Restoration  
+✔ Rotation policy  
+✔ Logging  
+✔ Dry run mode  
+✔ Lock file protection  
+
+
+
